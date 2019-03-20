@@ -1,5 +1,7 @@
 # forum-app
 
+继承自 https://github.com/annaelde/forum-app
+
 - Django REST Framework
 - Vue.js
 - Vue Router
