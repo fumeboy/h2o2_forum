@@ -1,7 +1,5 @@
 # forum-app
 
-A work-in-progress I'm using to learn:
-
 - Django REST Framework
 - Vue.js
 - Vue Router
@@ -9,13 +7,30 @@ A work-in-progress I'm using to learn:
 - Axios
 - Bulma
 
+how to start it:
+
+backend:
+
+```
+python3 manage.py makemigrations
+
+python3 manage.py migrate 
+
+python3 manage.py runserver
+```
+
+frontend:
+
+```
+yarn
+
+yarn mock
+```
+
+
 Additionally, this is a way to test my django-kit's configuration.
 
 # To-Do List
-- Forum
-    - Ensure interface is tabbable and accessible
-    - Create a custom theme
-    - Add more options for filtering feeds
 - Board
     - Create Board
     - ~~Retrieve Board~~
@@ -35,21 +50,21 @@ Additionally, this is a way to test my django-kit's configuration.
     - Delete Account
 - Avatars
     - Create Avatar
-    - ~Retrieve Avatar~
+    - ~~Retrieve Avatar~~
     - Update Avatar   
     - Delete Avatar
 - Bookmarks
-    - Create Bookmark
-    - Retrieve Bookmark
-    - Delete Bookmark
+    - ~~Create Bookmark~~
+    - ~~Retrieve Bookmark~~
+    - ~~Delete Bookmark~~
 - Comments
-    - Create Comment
-    - Retrieve Comment
-    - Delete Comment
-    - Update Comment
+    - ~~Create Comment~~
+    - ~~Retrieve Comment~~
+    - ~~Delete Comment~~
+    - ~~Update Comment~~
 
 # Screenshot
 
-A little preview of my progress so far:
+A little preview
 
-![forum-app screenshot, showing a post list.](https://raw.githubusercontent.com/annaelde/forum-app/master/screenshot.PNG)
+![forum-app screenshot.](https://i.loli.net/2019/03/20/5c91f189169fc.png)
