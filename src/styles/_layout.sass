@@ -1,0 +1,45 @@
+body
+    width: 100vw
+.box.grid2
+    display: grid
+    background: none
+    box-shadow: none
+    grid-template-rows: 1fr auto 1fr
+    grid-template-areas: "header" "controls" "content"
+
+.avatar_grid
+    display: grid
+    background: none
+    box-shadow: none
+    grid-template-columns: 6fr 6fr
+    grid-template-rows: auto
+    grid-template-areas:  "avatar" "text"
+    grid-row-gap: 1em
+
+
+.grid
+    display: flex
+    flex-flow: row wrap
+    width: 100%
+    margin: 3rem 0
+    
+.grid .card
+    display: flex
+    flex: 1 1 15em
+    flex-direction: column
+    margin: 1em
+    max-width: 50%
+
+    
+.grid .card-content
+    flex: 1 1 auto
+
+@supports(display: grid)
+    .grid
+        display: grid
+        grid-template-columns: repeat(auto-fit, minmax(15em, 1fr))
+        grid-gap: 1em
+
+    .grid .card
+        margin: 0
+        max-width: none
