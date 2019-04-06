@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.urls import path
 from django.contrib import admin
-from .views import forum_stats
+from .views import forum_stats, HotBoard, HotThread
 
 forum_patterns = [
-    url(r'^$', forum_stats)
+    url(r'^$', forum_stats),
+    path('hotB/', HotBoard.as_view()),
+    path('hotT/', HotThread.as_view()),
 ]
 
 app_patterns = [

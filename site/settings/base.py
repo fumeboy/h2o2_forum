@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 from django.core.exceptions import ImproperlyConfigured
 
-import datetime
-
 
 def get_secret(setting, secrets):
     """

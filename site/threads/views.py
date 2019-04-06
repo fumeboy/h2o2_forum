@@ -20,6 +20,11 @@ class ThreadList(ListCreateAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = Pagination
 
+    def post(self, request, *args, **kwargs):
+        print(self)
+        print(request.data)
+        return self.create(request, *args, **kwargs)
+
     def get_queryset(self):
         board = self.kwargs['board']
         return Post.objects.filter(board__slug=board)

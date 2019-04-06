@@ -2,14 +2,16 @@ from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.db.models import Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.generics import (ListCreateAPIView,
+from rest_framework.generics import (ListCreateAPIView, ListAPIView,
                                      RetrieveUpdateDestroyAPIView)
 from rest_framework.permissions import (SAFE_METHODS, IsAuthenticatedOrReadOnly)
 import json
 from .models import User
 from threads.models import Post
+from threads.serializers import PostSerializer
 from rest_framework.response import Response
 from .serializers import PublicUserSerializer, PrivateUserSerializer
+from rest_framework.pagination import PageNumberPagination
 
 
 class UserList(ListCreateAPIView):
@@ -63,74 +65,25 @@ class UserDetail(RetrieveUpdateDestroyAPIView):
             return PublicUserSerializer
 
 
-def get_usr_bookmark(request, username):
-    usr = User.objects.get(username=username)
-    contact_list = None
-    if usr:
-        contact_list = usr.bookmark.all()
-    resp = {
-        'list': [],
-        'prev': None,
-        'next': None
-    }
-    page = request.GET.get('page')
-    p_len = 10
-    if request.GET.get('len'):
-        p_len = request.GET.get('len')
-    paginator = Paginator(contact_list, p_len)
-    try:
-        contacts = paginator.page(page)  # contacts为Page对象！
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    for one in contacts:
-        resp['list'].append({
-            'author': one.author.username,
-            'board': one.board.slug,
-            'content': one.content,
-            'created': str(one.created),
-            'id': one.id,
-            'title': one.title
-        })
-
-    return HttpResponse(json.dumps(resp), content_type="application/json")
+class Pagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 
-@csrf_exempt
-def get_my_thread(request, username):
-    usr = User.objects.get(username=username)
-    contact_list = None
-    if usr:
-        contact_list = Post.objects.filter(author=usr)
-    resp = {
-        'list': [],
-        'prev': None,
-        'next': None
-    }
-    page = request.GET.get('page')
-    p_len = 10
-    if request.GET.get('len'):
-        p_len = request.GET.get('len')
-    paginator = Paginator(contact_list, p_len)
-    try:
-        contacts = paginator.page(page)  # contacts为Page对象！
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    for one in contacts:
-        resp['list'].append({
-            'author': one.author.username,
-            'board': one.board.slug,
-            'content': one.content,
-            'created': str(one.created),
-            'id': one.id,
-            'title': one.title
-        })
+class BookmarkList(ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = Pagination
 
-    return HttpResponse(json.dumps(resp), content_type="application/json")
+    def get_queryset(self):
+        return self.request.user.bookmark.all()
+
+
+class UsrThreadList(ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = Pagination
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
